@@ -1,7 +1,6 @@
 /**
- * @time 2019-05-20
  * @author Zhang Xiong
- * @version V12.0.1
+ * @version V12.0.1 2019-05-22
  */
 /*
  * 设计模式：对问题行之有效的解决方式。其实它是一种思想
@@ -19,9 +18,11 @@
  * 2.通过new在本类中创建本类对象
  * 3.定义一个公有方法，将创建的对象返回
  */
-class Single
+
+//饿汉式
+class Single//类一加载，对象就已经存在
 {
-    static Single s = new Single();
+    private static Single s = new Single();
 
     private Single(){}
 
@@ -30,11 +31,58 @@ class Single
         return s;
     }
 }
+//懒汉式 什么时候用，什么时候产生
+//被多线程并发时可能导致对象不唯一
+class Single_2//类加载进来，没有对象，只有调用了getInstance方法时，才会创建对象
+    //延迟加载形式
+{
+    private static Single_2 s = null;
+
+    private Single_2(){}
+
+    public static Single_2 getInstance()
+    {
+        if(s==null)
+            s = new Single_2();
+        return s;
+    }
+}
+
+class Test
+{
+    private int num;
+
+    private static Test t = new Test();
+    private Test(){}
+    public static Test getInstance()//为啥这样写。。
+    {
+        return t;
+    }
+    public void setNum(int num)
+    {
+        this.num = num;
+    }
+    public int getNum()
+    {
+        return num;
+    }
+}
+
 public class SingleDemo
 {
     public static void main(String[] args)
     {
-        //Single ss = Single.getInstance();
-        Single.s;
+        Single s1 = Single.getInstance();
+        Single s2 = Single.getInstance();
+
+        System.out.println(s1==s2);
+        //Single.s;
+        //保证Test类的唯一性
+        Test t1 = Test.getInstance();
+        Test t2 = Test.getInstance();
+        t1.setNum(10);
+        t2.setNum(20);//改变的同一个对象
+        System.out.println(t1.getNum());
+        System.out.println(t2.getNum());
     }
 }
