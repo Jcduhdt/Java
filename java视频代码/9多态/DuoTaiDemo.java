@@ -78,7 +78,7 @@ public class DuoTaiDemo
         method(new Pig());
 
         Animal a = new Cat();//自动类型提升，猫对象提升成了动物类型，但是特有功能无法访问
-        //作用就是限制对特有功能的访问  专业讲：向上转型
+        //作用就是限制对特有功能的访问  专业讲：向上转型，将子类型隐藏，就不能使用子类的特有方法
         a.eat();
 
         //如果还想用具体动物猫的特有功能，你可以将该对象进行向下转型
@@ -96,5 +96,16 @@ public class DuoTaiDemo
     public static void method(Animal a)//Animal a = new Cat();
     {
         a.eat();
+        if (a instanceof Cat)//instanceof 用于判断对象的具体类型，只能用于引用数据类型判断
+        //通常在向下转型前用于健壮性判断
+        {
+          Cat c = (Cat)a;
+          c.catchMouse();
+        }
+        else if (a instanceof Dog)
+        {
+          Dog d = (Dog)a;
+          d.lookHome;
+        }
     }
 }
