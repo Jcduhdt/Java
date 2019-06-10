@@ -22,8 +22,8 @@ public class BookPC
         useUSB(new UsbMouse());
     }
     //使用规则
-    public static void useUSB(USB u)//接口类型的引用，用于接收（指向）接口的子类对象
-    {
+    public static void useUSB(USB u)//接口类型的引用，用于接收（指向）接口的子类对象 USB u = new UPan();
+        {
         u.open();
         u.close();
     }
