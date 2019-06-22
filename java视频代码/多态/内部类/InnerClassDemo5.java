@@ -37,6 +37,7 @@ class Outer5
 }
 public class InnerClassDemo5
 {
+    class Inner{}
     public static void main(String[] args)
     {
         show(new Inter()
@@ -46,6 +47,7 @@ public class InnerClassDemo5
         });
     }
 
+    public void method(){new Inner();}
     public static void show(Inter in)
     {
         in.show1();
