@@ -17,11 +17,19 @@
  * 多线程弊端：线程太多会导致效率的降低，因为并不是同时进行，而是靠cpu在随机分配运行时间，在极短的时间内运行一个，就像TDMA
  *
  * 应用程序的执行都是cpu在做着快速的切换完成的，这个切换是随机的
+ *
+ * JVM启动时就启动了多个线程，至少有两个线程可以分析得出来
+ * 1.执行main函数的线程
+ *      该线程的任务代码都定义在主函数中
+ * 2.负责垃圾回收的线程
  */
 
-class Demo
+class Demo extends Object
 {
-
+    public void finalize()//finalize()是Object的protected方法，子类可以覆盖该方法以实现资源清理工作，GC在回收对象之前调用该方法。
+    {
+        System.out.println("demo ok");
+    }
 }
 public class Threading
 {
@@ -30,6 +38,10 @@ public class Threading
         new Demo();
         new Demo();
         new Demo();
+        System.gc();//自己运行垃圾回收站
         System.out.println("biu·biu·biu");
+        /*
+         * 因为有两个线程，所以打印结果有时候不一样，线程结束时间不一样
+         */
     }
 }
