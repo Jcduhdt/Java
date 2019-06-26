@@ -17,11 +17,16 @@
  *
  * 在java中，用同步代码块就可以解决这个问题
  * 同步代码块的格式：synchronized(对象){需要被同步的代码块}
+ *
+ * 同步的好处：解决了线程的安全问题
+ * 同步的弊端：相对降低了效率，因为同步外的线程都会判断同步锁，当cpu执行到这个线程的时候，但是判断有锁，就降低了效率浪费了资源
+ *
+ * 同步的前提：同步中必须有多个线程并使用同一个锁
  */
 
 class Ticket implements Runnable//extends Thread
 {
-    private int num = 500;
+    private int num = 100;
     Object obj = new Object();
     public void run()
     {
@@ -29,9 +34,10 @@ class Ticket implements Runnable//extends Thread
     }
     public void sale()
     {
+        //Object obj = new Object();  若该代码放这，就表示一个线程就一个锁
         while(true)
         {
-            synchronized (obj)
+            synchronized (obj)//obj相当于锁，有线程进去，就锁住了不能被别人打开  就类似单个卫生间有无人使用
             {
                 if (num > 0)
                 {
