@@ -37,7 +37,7 @@ class Input implements Runnable
                     r.name = "mike";
                     r.sex = "man";
                 } else {
-                    r.name = "莉莉";
+                    r.name = "理理";
                     r.sex = "女女女女女";
                 }
                 x = (x + 1) % 2;
@@ -69,7 +69,7 @@ public class ResourceDemo
 {
     public static void main(String[] args)
     {
-        //创建资源
+        //创建资源  资源唯一，因为两者就是对一资源进行处理
         Resource r = new Resource();
         //创建任务
         Input in = new Input(r);
