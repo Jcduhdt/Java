@@ -1,0 +1,80 @@
+
+最常见的客户端：
+    浏览器：IE
+最常见的服务端
+    服务器：Tomcat
+
+为了解其原理：
+
+1.
+自定义服务端，
+使用已有的客户端IE，了解一个客户端发送了什么请求
+
+发送的请求是：
+GET / HTTP/1.1    请求行，请求方式/myweb/1.html  请求的资源路径 http协议版本
+请求消息头，属性：属性值
+Host: localhost:9090  就是输入的访问的地址
+Connection: keep-alive
+Cache-Control: max-age=0
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8   支持的东西
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.116 Safari/537.36 TheWorld 7
+Accept-Encoding: gzip, deflate, sdch  支持的压缩方式
+Accept-Language: zh-CN,zh;q=0.8  支持语言
+//空行  区分请求头和请求体
+请求体：
+
+
+
+//服务器发回应答消息
+HTTP/1.1 200   //应答行，http的协议版本 应答状态码，应答状态描述信息  200就是成功
+
+应答消息属性信息，属性名：属性值
+Content-Type: text/html;charset=UTF-8
+Transfer-Encoding: chunked
+Date: Sat, 27 Jul 2019 08:46:15 GMT  页面日期
+Connection: close
+
+2000  这是个啥
+
+//空行
+//应答体  应该是还没有完全弄完因为没有循环获取，只获取了1024
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Apache Tomcat/9.0.22</title>
+        <link href="favicon.ico" rel="icon" type="image/x-icon" />
+        <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <link href="tomcat.css" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <div id="navigation" class="curved container">
+                <span id="nav-home"><a href="https://tomcat.apache.org/">Home</a></span>
+                <span id="nav-hosts"><a href="/docs/">Documentation</a></span>
+                <span id="nav-config"><a href="/docs/config/">Configuration</a></span>
+                <span id="nav-examples"><a href="/examples/">Examples</a></span>
+                <span id="nav-wiki"><a href="https://wiki.apache.org/tomcat/F
+
+
+</html>
+
+
+网络结构
+1.C/S  client/server
+
+    特点：
+
+        该结构的软件，客户端和服务端都需要编写
+        可发成本较高，维护较为麻烦
+    好处：
+        客户端在本地可以分担一部分运算，比如说游戏效果呀，3D啊什么的
+
+2.B/S  browser/server
+    特点：
+        该结构的软件，之开发服务器端，不开发客户端，因为客户端直接由浏览器取代
+        开发成本相对低，维护更为简单
+    缺点：所有运算都在服务器端完成
