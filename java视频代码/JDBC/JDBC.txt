@@ -1,0 +1,105 @@
+Java Database Connectivity
+Java数据库连接，Java语言操作数据库
+JDBC本质:官方(Sun公司)定义了一套操作所有关系型数据库的规则（接口），各个数据库厂商去实现这套接口，提供数据库驱动Jar包。
+        我们可以使用这套接口(JDBC)编程，真正执行的代码是驱动jar包中的实现类
+
+步骤：
+    1.导入驱动jar包
+    2.注册驱动
+    3.获取数据库连接对象Connection
+    4.获取sql语句的对象 Statement
+    5.执行sql，接收返回结果
+    6.处理结果
+    7.释放资源
+
+代码实现：
+    //1.导入驱动Jar包
+    //file->project structure->modules->dependense->右边的+第一个
+    //注册驱动
+    Class.forName("com.mysql.cj.jdbc.Driver");
+    //获取数据库连接对象
+    //因为连接的数据库时mysql8版本，所以需要在url上添加?useSSL=false&serverTimezone=UTC 否则会报错
+    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/zx_log?useSSL=false&serverTimezone=UTC","root","zx041400414.");
+    //定义sql语句
+    //对于字段中为string的内容用''包括
+    String sql = "update work_log set work_place = '重庆' where work_id = 3";
+    //获取执行sql的对象
+    Statement stmt = conn.createStatement();
+    //执行sql
+    int count = stmt.executeUpdate(sql);
+    //处理结果
+    System.out.println(count);
+    //释放资源
+    stmt.close();
+    conn.close();
+
+详解各个对象：
+    1.DriverManager:驱动管理对象
+        功能：
+            1.注册驱动：告诉程序该使用哪一个数据库驱动jar包
+                static void registerDriver(Driver driver)：注册与给定的驱动程序DriverManager
+                写代码使用 Class.forName("com.mysql.cj.jdbc.Driver");
+                通过查看源码发现：在com.mysql.jdbc.Driver中存在静态代码块  这是mysql5中的，因为8中的jdbc是class文件，看不到
+                    static{
+                          try{
+                                java.sql.DriverManager.registerDriver(new Driver());
+                          }catch(SQLException E){
+                                throw new RuntimeException("Can't register driver!)"
+                          }
+                注意：mysql5之后的驱动jar包可以省略注册驱动的步骤 因为META-INF.services.java.sql.Driver已经帮我们写了
+                     系统会先读取这个东西
+            2.获取数据库连接
+                 方法：static Connection getConnection(String url, String user, String password)
+                        参数：
+                            url：指定连接的路径
+                                语法：jdbc:mysql://ip地址(域名):端口号/数据库名称
+                                细节：如果连接的是本机mysql服务器，并且mysql服务默认端口是3306，则url可以简写为jdbc:mysql:///数据库名称
+                            user:用户名
+                            password:密码
+    2.Connection：数据库连接对象
+        1.功能：
+            1.获取执行sql的对象
+                Statement createStatement()
+                PreparedStatement prepareStatement(String sql)
+            2.管理事务
+                开启事务：void setAutoCommit(boolean autoCommit)  调用该方法设置参数为false，即开启事务
+                提交事务：void commit()
+                回滚事务：void rollback()
+    3.Statement：执行sql的对象
+        1.执行sql
+            1.boolean execute(String sql) 可以执行任意sql 了解
+            2.int executeUpdate(String sql) 执行DML(insert、update、delete)语句 DDL(create,alter,drop)语句
+                1.返回值：影响的行数，可以通过这个影响的行数判断DML语句是否执行成功，返回值>0则执行成功，反之则失败
+            3.ResultSet executeQuery(String sql) 执行DQL(select)语句
+        2.练习
+            1.添加一条记录
+            2.修改一条记录
+            3.删除一条记录
+    4.ResultSet：结果集对象，封装查询结果
+        boolean next():游标向下移动一行,判断当前行是否是最后一行末尾（是否有数据），是，返回false，反之返回true
+            getxxx(参数):获取数据
+                 xxx:代表数据类型  如 int getInt(),  String getString()
+                 参数：
+                    1.int：代表列的编号，从1开始，如getString(1)
+                    2.String:代表名称，如：getString(work_felling)
+        注意：
+            使用步骤：
+                1.游标向下移动一行
+                2.判断是否有数据
+                2.获取数据
+                while (rs.next()) {
+                    //获取数据
+                    int id = rs.getInt(1);
+                    String place = rs.getString("work_place");
+                    String felling = rs.getString("work_felling");
+                    String things = rs.getString("work_things");
+
+                    System.out.println(id + "---" + place + "---" + felling + "---" + things);
+                }
+        练习：
+            定义一个方法,查询库student的表vendors的数据将其封装为对象，然后装载集合，返回打印
+                1.定义vendors类
+                2.定义方法public List<vendors> findAll(){}
+                3.实现方法 select * from vendors;
+
+    5.PreparedStatement：执行sql对象
