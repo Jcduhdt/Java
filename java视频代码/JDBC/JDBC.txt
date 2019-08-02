@@ -103,3 +103,36 @@ JDBC本质:官方(Sun公司)定义了一套操作所有关系型数据库的规�
                 3.实现方法 select * from vendors;
 
     5.PreparedStatement：执行sql对象
+        1.SQL注入问题：在拼接sql时，有一些特殊关键字参与字符串的拼接会造成安全性问题
+            1.输入用户随便，输入密码：a' or 'a' = 'a
+            2.select * from user where username = 'sadfqawd' and password = 'a' or 'a' = 'a'
+抽取JDBC工具类：JDBCUtils
+    目的：简化书写
+    分析：
+        1.注册驱动也抽取
+        2.抽取一个方法获取连接对象
+            需求：不想传递参数（麻烦），还得保证工具类的通用性
+            解决：配置文件
+                jdbc.properties
+                    url=
+                    user=
+                    password=
+        3.抽取一个方法释放资源
+
+
+练习：
+    需求：
+        1.通过键盘录用户名和密码
+        2.判断用户是否登陆成功
+            select * from user where username = "" and password = "";
+            如果这个sql有查询结果，则成功，反之则失败
+    步骤：
+        1.创建数据库表 user表
+            create table user(
+                id int primary key auto_increment,
+                username varchar(32),
+                password varchar(32)
+            );
+
+            insert into user VALUES(null,'zhangsan','123');
+            insert into user VALUES(null,'lisi','234');
