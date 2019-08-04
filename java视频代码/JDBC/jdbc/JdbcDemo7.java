@@ -2,10 +2,7 @@ package jdbc;
 
 import util.JdbcUtilsDemo;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Scanner;
 
 /**
@@ -68,6 +65,44 @@ public class JdbcDemo7 {
             e.printStackTrace();
         }finally {
             JdbcUtilsDemo.close(rs,stmt,conn);
+        }
+
+
+        return false;
+    }
+
+    /**
+     * 登陆方法2
+     * 使用PreparedStatement
+     */
+    public boolean login2(String username,String password){
+        if (username == null || password == null){
+            return false;
+        }
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        //链接数据库判断是否登陆成功
+        try {
+            conn = JdbcUtilsDemo.getConnection();
+            String sql = "select * from user where username = ? and password = ?";
+            pstmt = conn.prepareStatement(sql);
+            //给?赋值
+            pstmt.setString(1,username);
+            pstmt.setString(2,password);
+            //执行查询，不需要传递sql
+            rs = pstmt.executeQuery();
+            /*if (rs.next()){
+                return true;
+            }else{
+                return false;
+            }*/
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            JdbcUtilsDemo.close(rs,pstmt,conn);
         }
 
 
