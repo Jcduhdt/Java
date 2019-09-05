@@ -1,0 +1,32 @@
+﻿1.骨架创建maven的web项目时，有两个，选第二个，即没有22那个webapp
+2.刚创建maven web项目时，不能直接创建servlet文件，需要在pom.xml中添加依赖包
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>LATEST</version>
+    </dependency>
+    项目中其他需要的依赖jar包也是这样导。
+3.还有就是pom中选择jdk，直接写12，不写12.0.1
+4.运行项目时，出错,因为自身的tomcat与maven的tomcat冲突了，需要在导入的jar包中添加作用域
+5.崩了，运行maven时疯狂报错，后来发现是使用tomcat:run运行的是Tomcat6,但是这个版本太低了
+    与JDK版本不匹配，所以我配置了Tomcat服务器，就像之前的普通的web项目一样运行tomcat就行了
+    但是按照pdf上的配置pom.xml tomecat7的插件加上
+     <configuration>
+        <port>8080</port>
+        <server>tomcat9</server>
+        <update>true</update>
+        <path>/</path>
+     </configuration>
+     setting也增加了一句
+     <server>
+          <id>tomcat9</id>
+     </server>
+6.pom.xml中添加
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>12</maven.compiler.source>
+        <maven.compiler.target>12</maven.compiler.target>
+        <argLine>-Dfile.encoding=UTF-8</argLine>
+    </properties>
+	保证使用的是jdk12和utf-8编码
+
