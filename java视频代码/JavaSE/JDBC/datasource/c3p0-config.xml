@@ -5,7 +5,7 @@
     <property name="driverClass">com.mysql.cj.jdbc.Driver</property>
     <property name="jdbcUrl">jdbc:mysql://localhost:3306/db4?serverTimezone=UTC</property>
     <property name="user">root</property>
-    <property name="password">zx041400414.</property>
+    <property name="password">root</property>
 
     <!-- 连接池参数 -->
     <!-- 初始化申请的连接数量 -->
