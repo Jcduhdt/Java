@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--开启注解的扫描-->
+    <context:component-scan base-package="com.jcduhdt"/>
+
+    <!--视图解析器-->
+    <bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <!--前端控制器，哪些静态资源不拦截-->
+    <mvc:resources location="/css/" mapping="/css/**"/> <!-- 样式 -->
+    <mvc:resources location="/images/" mapping="/images/**"/> <!-- 图片 -->
+    <mvc:resources location="/js/" mapping="/js/**"/>
+
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <!--配置拦截器-->
+        <mvc:interceptor>
+            <!--要拦截的具体方法-->
+            <mvc:mapping path="/user/*"/><!--user下面的目录都拦截  若为/**则所有方法都拦截-->
+            <!--不要拦截的方法，两个写一个就行
+            <mvc:exclude-mapping path=""/>
+            -->
+            <!--配置拦截器对象-->
+            <bean class="com.jcduhdt.interceptor.MyInterceptor1"></bean>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <!--要拦截的具体方法-->
+            <mvc:mapping path="/**"/><!--user下面的目录都拦截  若为/**则所有方法都拦截-->
+            <!--不要拦截的方法，两个写一个就行
+            <mvc:exclude-mapping path=""/>
+            -->
+            <!--配置拦截器对象-->
+            <bean class="com.jcduhdt.interceptor.MyInterceptor2"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!--开启SpringMVC框架注解-->
+    <mvc:annotation-driven/>
+</beans>
